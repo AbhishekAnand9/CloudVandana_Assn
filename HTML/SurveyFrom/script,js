@@ -1,0 +1,63 @@
+function submitForm() {
+    const formData = {
+        'First Name': document.getElementById('firstName').value,
+        'Last Name': document.getElementById('lastName').value,
+        'Date of Birth': document.getElementById('dob').value,
+        'Country': document.getElementById('country').value,
+        'Gender': getCheckedCheckboxesFor('gender').join(', '),
+        'Profession': document.getElementById('profession').value,
+        'Email': document.getElementById('email').value,
+        'Mobile Number': document.getElementById('mobile').value
+    };
+
+    if (validateForm(formData)) {
+        displayPopup(formData);
+        resetForm();
+    } else {
+        alert('Please fill in all the required fields.');
+    }
+}
+
+function resetForm() {
+    const form = document.getElementById('surveyForm');
+    form.reset();
+
+    // Reset the popup message as well
+    document.getElementById('popupData').innerHTML = '';
+
+    // Hide the popup
+    document.getElementById('popup').style.display = 'none';
+}
+
+
+function validateForm(formData) {
+    for (const value of Object.values(formData)) {
+        if (!value) {
+            return false; 
+        }
+    }
+    return true; 
+}
+
+
+function getCheckedCheckboxesFor(checkboxName) {
+    const checkboxes = document.querySelectorAll(`input[name="${checkboxName}"]:checked`);
+    return Array.from(checkboxes).map(checkbox => checkbox.value);
+}
+
+function displayPopup(formData) {
+    const popupDataElement = document.getElementById('popupData');
+    popupDataElement.innerHTML = '';
+
+    for (const [label, value] of Object.entries(formData)) {
+        const dataItem = document.createElement('p');
+        dataItem.innerHTML = `<strong>${label}:</strong> ${value}`;
+        popupDataElement.appendChild(dataItem);
+    }
+
+    document.getElementById('popup').style.display = 'flex';
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
